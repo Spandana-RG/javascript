@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   //Question 1
   $('#textContentDisplay')[0].textContent = 'Output: <a href="https://google.com">google</a>'
   $('#innerHtmlDisplay')[0].innerHTML = 'Output: <a href="https://google.com">google</a>'
+  var c = document.getElementsByTagName("BUTTON")[0];
+  $('#nodeValueDisplay')[0].innerHTML = 'Output: '+ c.childNodes[0].nodeValue;
   localStorage.lasttimeopen = Date();
 });
 
