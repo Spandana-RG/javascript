@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   createTable();
   // Question 2
   createDiagram();
+  //Question 1
+  $('#textContentDisplay')[0].textContent = 'Output: <a href="https://google.com">google</a>'
+  $('#innerHtmlDisplay')[0].innerHTML = 'Output: <a href="https://google.com">google</a>'
   localStorage.lasttimeopen = Date();
 });
 
