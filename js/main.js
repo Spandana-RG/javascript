@@ -331,3 +331,36 @@ function updateTrack(elementId, playDate) {
 function recentPlayList() {
   displayMiddleSection(true);
 }
+
+function drawTable() {
+  tableDimension = JSON.parse($('#dimensionFormSubmit input[name="tableDimension[]"]').val());
+  // spanDimension = $('#dimensionFormSubmit input[name="spanDimension{}"]').val();
+  spanDimension = eval('(' + $('#dimensionFormSubmit input[name="spanDimension{}"]').val() + ')');
+  var tableDiv = document.createElement('div');
+  tableDiv.setAttribute('id', 'spanDimensionTable');
+  // tableDiv.setAttribute('class', 'container')
+  document.getElementById('dimensionFormSubmit').appendChild(tableDiv);
+  var myTableDiv = document.getElementById("spanDimensionTable");
+
+    var table = document.createElement('TABLE');
+    table.border = '1';
+    var tableBody = document.createElement('TBODY');
+    table.appendChild(tableBody);
+
+    for (var i = 0; i < tableDimension[0]; i++) {
+      var tr = document.createElement('TR');
+      tableBody.appendChild(tr);
+
+      for (var j = 0; j < tableDimension[1]; j++) {
+        var td = document.createElement('TD');
+        td.innerHTML = "dummy text";
+        tr.appendChild(td);
+      }
+    }
+    myTableDiv.appendChild(table);
+    if(spanDimension.type === 'row'){
+
+    } else if(spanDimension.type === 'row') {
+
+    }
+}

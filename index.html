@@ -28,9 +28,25 @@
 <!-- Section 2 starts here -->
 <button class="accordion">Section 2</button>
 <div class="panel createDiagram">
-	
+
 </div>
 <!-- Section 2 end -->
+
+<!-- Section 3 starts here -->
+<button class="accordion">Section 3</button>
+<div class="panel">
+  <div class='container-dimension'>
+    <form id='dimensionFormSubmit' onsubmit="drawTable()" >
+      Table Dimension:
+        <input type="text" name="tableDimension[]" maxlength="30" value="" required />
+      Span Dimension:
+        <input type="text" name="spanDimension{}" maxlength="50" value="" required />
+        <input type="submit" name="submit" value="Submit" id='tableDimension' />
+    </form>
+  </div>
+
+</div>
+<!-- Section 3 end -->
 
 <!-- Section 4 starts here -->
 <button class="accordion">Section 4</button>

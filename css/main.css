@@ -130,7 +130,7 @@ div.panel {
   background-color: #dddddd;
 }
 
-.container {
+.container, .container-dimension {
   padding: 10px;
 }
 
