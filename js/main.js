@@ -238,9 +238,9 @@ function displayMiddleSection(recentBool){
     userTracks = JSON.parse(localStorage.getItem("track"));
     var headers = ['Song Name', 'Song Theme', 'Play Count', 'Last played'];
     userTracks.sort(function (a, b) {
-      return a.playCount < b.playCount;
+      return a.playCount - b.playCount || a.lastTimePlayed > b.lastTimePlayed;
     });
-    userTracks = userTracks.slice(0,4);
+    userTracks = userTracks.reverse().slice(0, 4);
   } else {
     userTracks = JSON.parse(localStorage.getItem("track"));
     var headers = ['Song Name', 'Song Theme', 'Play Count', 'Last played', 'Play Song'];
