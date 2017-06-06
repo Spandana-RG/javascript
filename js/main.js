@@ -9,6 +9,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
   $('#innerHtmlDisplay')[0].innerHTML = 'Output: <a href="https://google.com">google</a>'
   var c = document.getElementsByTagName("BUTTON")[0];
   $('#nodeValueDisplay')[0].innerHTML = 'Output: '+ c.childNodes[0].nodeValue;
+  // Question 6
+  if(localStorage.track) {
+    displayMiddleSection();
+  } else {
+    $('#displayUserTrack').html("<h1> Please add your favourite Song </h1>");
+  }
+  $('#middleSongSection').on("click", 'tr td a', function() {
+    countDown($(this).attr('id'));
+  });
+  recentPlayList();
   localStorage.lasttimeopen = Date();
 });
 
@@ -202,9 +212,121 @@ function colorChange(divClassName) {
 }
 
 $('.toggle-checkbox').click(function(event){
-event.stopPropagation();
+  event.stopPropagation();
 });
 
 function randColor() {
   return '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+}
+
+$('#songFormSubmit').submit(function(event){
+  var songList = JSON.parse(localStorage.getItem('track')) || [];
+  event.preventDefault();
+  var name = $('#songFormSubmit input[name="songName"]').val();
+  var theme = $('#songFormSubmit input[name="songTheme"]').val();
+  var song1 = new song(name,theme,0,0)
+  songList.push(song1);
+  localStorage.setItem('track', JSON.stringify(songList));
+  clearText();
+
+  displayMiddleSection();
+});
+
+function displayMiddleSection(recentBool){
+  if (recentBool) {
+    userTracks = JSON.parse(localStorage.getItem("track"));
+    var headers = ['Song Name', 'Song Theme', 'Play Count', 'Last played'];
+    userTracks.sort(function (a, b) {
+      return a.playCount < b.playCount;
+    });
+    userTracks = userTracks.slice(0,4);
+  } else {
+    userTracks = JSON.parse(localStorage.getItem("track"));
+    var headers = ['Song Name', 'Song Theme', 'Play Count', 'Last played', 'Play Song'];
+  }
+  var table = document.createElement('table');
+  var tr = document.createElement('tr');
+  jQuery.each(headers, function(index, header) {
+    var th = document.createElement('th');
+    th.appendChild(document.createTextNode(header));
+    tr.appendChild(th);
+  });
+  table.appendChild(tr);
+  jQuery.each( userTracks, function( i, obj ) {
+    var tr = document.createElement('tr');
+    var td1 = document.createElement('td')
+    $.each( obj, function( key, value ) {
+      var td = document.createElement('td');
+      td.appendChild(document.createTextNode(value));
+      tr.appendChild(td);
+      table.appendChild(tr);
+    });
+    if (!recentBool) {
+      aTag = document.createElement('a')
+      aTag.setAttribute('id', 'playSound' + i);
+      aTag.innerHTML = "Play Song" ;
+      aTag.href = '#';
+      td1.appendChild(aTag);
+      tr.appendChild(td1);
+    }
+  });
+  if (recentBool) {
+    $('#recentTrack').html(table);
+  } else {
+    $('#displayUserTrack').html(table);
+  }
+}
+
+function song(name, theme, playCount, lastTimePlayed) {
+  this.name = name;
+  this.theme = theme;
+  this.playCount = playCount;
+  this.lastTimePlayed = lastTimePlayed;
+}
+
+function clearText()
+{
+  $('#songFormSubmit input[name="songName"]')[0].value = '';
+  $('#songFormSubmit input[name="songTheme"]')[0].value = '';
+}
+
+function countDown(elementId){
+  var playButton = document.getElementById(elementId);
+  var counter = 5;
+  var newElement = document.createElement("p");
+  newElement.innerHTML = "Song will be end in 5 seconds.";
+  var id;
+  playButton.closest('td').replaceChild(newElement, playButton);
+
+  id = setInterval(function() {
+      counter--;
+      if(counter < 0) {
+          newElement.parentNode.replaceChild(playButton, newElement);
+          clearInterval(id);
+          updateTrack(elementId, Date());
+      } else {
+          newElement.innerHTML = "Song will be end in " + counter.toString() + " seconds.";
+      }
+  }, 1000);
+}
+
+
+function updateTrack(elementId, playDate) {
+  var songName = $('#' + elementId).parent().siblings()[0].textContent;
+  var songTheme = $('#' + elementId).parent().siblings()[1].textContent;
+  var userTracks = JSON.parse(localStorage.getItem("track"));
+  for (var i = 0; i < userTracks.length; i++) {
+     if(songName === userTracks[i].name && songTheme === userTracks[i].theme ) {
+         userTracks[i].playCount += 1;  //add ne
+         userTracks[i].lastTimePlayed =  Date(); 
+         break;  //exit loop since you found the person
+     }
+  }
+  localStorage.setItem("track", JSON.stringify(userTracks));
+  displayMiddleSection();
+  recentPlayList();
+}
+
+function recentPlayList() {
+  displayMiddleSection(true);
 }

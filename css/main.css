@@ -113,3 +113,27 @@ div.panel {
 .toggle-checkbox:checked{
   background-color: #2ECC71;
 }
+
+.container table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.container td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.container tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.container {
+  padding: 10px;
+}
+
+.container td p {
+  display: inline;
+}

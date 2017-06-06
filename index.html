@@ -51,6 +51,30 @@
 
 </div>
 <!-- Section 5 end -->
+
+<!-- Section 6 starts here -->
+<button class="accordion">Section 6</button>
+<div class="panel">
+  <section class='container' id=topSongSection>
+    <h3> Recent Play List </h3>
+    <div id='recentTrack'> </div> 
+  </section>
+  <section class='container' id=middleSongSection>
+    <h3> Added Track List </h3>
+    <div id='displayUserTrack'> </div> 
+  </section>
+  <section class='container' id='bottomSongSection'>
+    <form id='songFormSubmit'>
+      Song Name:
+      <input type="text" name="songName" maxlength="30" value="" required />
+      Song Theme:
+      <input type="text" name="songTheme" maxlength="30" value="" required />
+      <input type="submit" name="submit" value="Add Song" id='songSubmit' />
+    </form>
+  </section>
+</div>
+<!-- Section 6 end -->
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
 
 <script type="text/javascript" src="js/main.js"></script>
