@@ -196,13 +196,14 @@ function createDiv(divClassName, appendClassName) {
 function colorChange(divClassName) {
   window.event.stopPropagation();
   divClassName = window.event.target.className;
-  if(divClassName === 'browser-window'){
-    $('.browser-window')[0].style.backgroundColor = randColor();
-  } else if(divClassName.split(/\s+/)[0] === 'block2') {
+  $('.browser-window')[0].style.backgroundColor = randColor();
+  if(divClassName.split(/\s+/)[0] === 'block2') {
     $('.block2').toggleClass('color-blue')
+    $('.block3').toggleClass('color-yellow')
     $('.block3 .toggle-checkbox').prop('checked', false);
     $('.block2 .toggle-checkbox').prop('checked', true);
   } else if(divClassName.split(/\s+/)[0]=== 'block3') {
+    $('.block2').toggleClass('color-blue')
     $('.block3').toggleClass('color-yellow')
     $('.block2 .toggle-checkbox').prop('checked', false);
     $('.block3 .toggle-checkbox').prop('checked', true);
