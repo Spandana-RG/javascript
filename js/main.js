@@ -83,6 +83,7 @@ function createTable() {
         inputTag.type = "number";
         inputTag.min = 1;
         inputTag.max = 4;
+        inputTag.setAttribute('id', 'sudoku' + i + j);
         td.appendChild(inputTag);
         tr.appendChild(td);
       }
@@ -94,47 +95,58 @@ function solveSudoku() {
   if(validateSudokuForm()) {
     document.getElementsByClassName('display-error-messages')[0].style.display = 'none';
     var game = constructArray();
-    var validValues = ['1', '2', '3', '4'];
-    for(var i=0; i<4; i++) {
-      var currentRowValues = []
-      var currentColValues = []
-      for(var j=0; j<4; j++) {
-        currentRowValues.push(game[i][j])
-        currentColValues.push(game[j][i])
-        if(j === 3) {
-          var result = currentRowValues.concat(currentColValues).filter(Number); 
-
-          result = jQuery.unique(result);
-          var validInsertElements = array_diff(result, validValues)
-          console.log('________________');
-          console.log(validInsertElements)
-          for(var x=0; x<4; x++) {
-            if ( game[i][x] === ''){
-              element = validInsertElements.pop()
-              game[i][x] = element;
-            }
-          }
+    solvedSudoku = sudoku(game);
+    if (true) {
+      for(i=0; i<4; i++) {
+        for(j=0; j<4; j++) {
+          $('#sudoku'+i+j)[0].value = solvedSudoku[i][j];
         }
       }
-     
-      
+    $('#sudokuDynamicTable table')[0].style.backgroundColor = 'Green'
     }
-    console.log(game[0]);
   }
 }
 
-function array_diff(array1, array2){
-    var difference = $.grep(array1, function(el) { return $.inArray(el,array2) < 0});
-    return difference.concat($.grep(array2, function(el) { return $.inArray(el,array1) < 0}));;
+function sudoku(game) {
+  for(var i=0; i<4; i++) {
+    for(var j=0; j<4; j++) {
+        game[j][i] = digit(game, i, j)
+      }
+  }
+  return game;
 }
 
-function subMatrix(i, j, game) {
-  sectRow = Math.floor( i / 2 );
-  sectCol = Math.floor( j / 2 );
-  console.log(sectRow);
-  console.log(sectCol);
+function digit(game, i, j) {
+  if (game[j][i] !== 0) {
+    return game[j][i];
+  }
+  var row = game[j];
+  var column = columnArray(game, i);
+  var grid = gridArray(game, i, j);
+  var knowns = row.concat(column, grid);
+  var possibilities = [1, 2, 3, 4].filter(function(item) { return knowns.indexOf(item) === -1; });
+  return possibilities.length >= 1 ? possibilities[0] : 0;
 }
 
+function columnArray(game, idx) {
+  return game.map(function(row) { return row[idx]; });
+}
+
+function gridArray(game, x, y) {
+  x = Math.floor(x / 2) * 2;
+  y = Math.floor(y / 2) * 2;
+  var arr = [];
+  for (i = x; i < x + 2; i++) {
+    for (j = y; j < y + 2; j++) {
+      arr.push(game[j][i]);
+    }
+  }
+  return arr;
+}
+
+function sum(arr) {
+    return arr.reduce(function(a, n) { return a + n; }, 0);
+}
 
 function constructArray() {
   var sudokuArray = [];
@@ -143,7 +155,11 @@ function constructArray() {
     var currentRow = []
     tableData= elements[i].getElementsByTagName('input')
     for(var j=0; j < 4; j++){
-      currentRow.push(tableData[j].value)
+      if (tableData[j].value === '') {
+        currentRow.push(0)
+      } else {
+        currentRow.push(parseInt(tableData[j].value))
+      }
     }
     sudokuArray.push(currentRow);
     }
@@ -333,6 +349,8 @@ function recentPlayList() {
 }
 
 function drawTable() {
+  $('#spanDimensionTable').remove();
+  window.event.stopPropagation();
   tableDimension = JSON.parse($('#dimensionFormSubmit input[name="tableDimension[]"]').val());
   // spanDimension = $('#dimensionFormSubmit input[name="spanDimension{}"]').val();
   spanDimension = eval('(' + $('#dimensionFormSubmit input[name="spanDimension{}"]').val() + ')');
@@ -358,9 +376,18 @@ function drawTable() {
       }
     }
     myTableDiv.appendChild(table);
-    if(spanDimension.type === 'row'){
-
+    if(spanDimension.type === 'col') {
+      spanning = spanDimension.span[0]
+      rowValue = spanDimension.row
+      $('#spanDimensionTable table tr:eq('+ rowValue +') td:eq('+ spanning +')')[0].innerHTML = "bhal";
+      $('#spanDimensionTable table tr:eq('+ rowValue +') td:eq('+ spanning +')')[0].setAttribute('colspan', (spanDimension.span[1] - spanDimension.span[0]) + 1)
+      $('#spanDimensionTable table tr:eq('+ rowValue +') td:eq('+ spanning +')').next().remove()
     } else if(spanDimension.type === 'row') {
-
+        spanning = spanDimension.span[0]
+        columnValue = spanDimension.col
+        $('#spanDimensionTable table tr:eq('+ spanning +') td:eq('+ columnValue +')')[0].innerHTML = "bhal";
+        $('#spanDimensionTable table tr:eq('+ spanning +') td:eq('+ columnValue +')')[0].setAttribute('rowspan', (spanDimension.span[1] - spanDimension.span[0]) + 1)
+        $('#spanDimensionTable table tr:eq('+ spanDimension.span[1] +') td:eq('+ columnValue +')')[0].remove()
     }
+  return false;
 }
